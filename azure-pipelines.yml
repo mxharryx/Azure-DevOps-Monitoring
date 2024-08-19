@@ -1,0 +1,19 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'AzureSPConnection'
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az vm extension set --resource-group MonitoringRG --vm-name MyVM --name OmsAgentForLinux --publisher Microsoft.EnterpriseCloud.Monitoring --version 1.10 --settings '{"workspaceId": "/subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/MonitorRG/providers/Microsoft.OperationalInsights/workspaces/MonitoringWorkspace"}'

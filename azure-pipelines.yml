@@ -41,4 +41,4 @@ steps:
         --vm-name $(vmName) `
         --name MicrosoftMonitoringAgent `
         --publisher Microsoft.EnterpriseCloud.Monitoring `
-        --settings '{"workspaceId": "aeb0ff90-63af-49c8-95ee-c86dbb105b40"}'
+        --settings "`"{`"workspaceId`":`"aeb0ff90-63af-49c8-95ee-c86dbb105b40`"}`""

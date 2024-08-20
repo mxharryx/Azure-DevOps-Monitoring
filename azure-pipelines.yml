@@ -34,6 +34,11 @@ steps:
     scriptLocation: 'inlineScript'
     inlineScript: |
       
+      # Define the JSON settings as variables
+      $publicSettings = '{\"workspaceId\":\"aeb0ff90-63af-49c8-95ee-c86dbb105b40\"}'
+      $protectedSettings = '{\"workspaceKey\":\"uTTMvs/CQCkjAxQOOJEd1oYvaUvtMtcxlW6yqC3uAXo6/mDZQODO8DcRvFJ8rHIDjz6oJYocianNGPgsPR36bg==\"}'
+    
+      
       # Install the Microsoft Monitoring Agent (MMA) on the Windows VM
       # This agent collects data from the VM and sends it to the Log Analytics workspace
       az vm extension set `
@@ -41,5 +46,5 @@ steps:
         --vm-name $(vmName) `
         --name MicrosoftMonitoringAgent `
         --publisher Microsoft.EnterpriseCloud.Monitoring `
-        --settings '{\"workspaceId\":\"aeb0ff90-63af-49c8-95ee-c86dbb105b40\"}'
-        --protected-settings '{\"workspaceKey\":\"uTTMvs/CQCkjAxQOOJEd1oYvaUvtMtcxlW6yqC3uAXo6/mDZQODO8DcRvFJ8rHIDjz6oJYocianNGPgsPR36bg==\"}'
+        --settings $publicSettings `
+        --protected-settings $protectedSettings 

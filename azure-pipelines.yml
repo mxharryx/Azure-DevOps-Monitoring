@@ -1,19 +1,44 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
+# Trigger the pipeline when changes are pushed to the 'main' branch
 trigger:
-- main
+- main 
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'windows-latest' 
 
+variables:
+  azureSubscription: 'AzureSPConnection'  # Name of the service connection to authenticate with Azure
+  resourceGroupName: 'MonitoringRG'  # Name of the resource group containing the VM and Log Analytics workspace
+  workspaceName: 'MonitoringWorkspace'  # Name of the Log Analytics workspace
+  vmName: 'MyMonitoringVM'  # Name of the Virtual Machine to be monitored
+
+# Define the steps of the pipeline
 steps:
+
+# Step 1: Run Azure CLI commands to interact with Azure resources
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'AzureSPConnection'
-    scriptType: 'bash'
+    azureSubscription: $(azureSubscription)
+    scriptType: 'ps'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az vm extension set --resource-group MonitorRG --vm-name MyVM --name OmsAgentForLinux --publisher Microsoft.EnterpriseCloud.Monitoring --version 1.10 --settings '{"workspaceId": "/subscriptions/5518087e-908d-4cb5-ac6a-d09d9eef4fb6/resourceGroups/MonitorRG/providers/Microsoft.OperationalInsights/workspaces/MonitoringWorkspace"}'
+      
+      # PowerShell command to check if the Log Analytics workspace exists
+      az monitor log-analytics workspace show --resource-group $(resourceGroupName) --workspace-name $(workspaceName)
+
+
+# Step 2: Install and configure the Microsoft Monitoring Agent (MMA) on the Windows VM
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(azureSubscription)
+    scriptType: 'ps'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      
+      # Install the Microsoft Monitoring Agent (MMA) on the Windows VM
+      # This agent collects data from the VM and sends it to the Log Analytics workspace
+      az vm extension set `
+        --resource-group $(resourceGroupName) `
+        --vm-name $(vmName) `
+        --name MicrosoftMonitoringAgent `
+        --publisher Microsoft.EnterpriseCloud.Monitoring `
+        --settings '{"workspaceId": "your-workspace-id"}'

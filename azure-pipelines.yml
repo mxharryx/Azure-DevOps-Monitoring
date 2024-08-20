@@ -42,3 +42,4 @@ steps:
         --name MicrosoftMonitoringAgent `
         --publisher Microsoft.EnterpriseCloud.Monitoring `
         --settings '{\"workspaceId\":\"aeb0ff90-63af-49c8-95ee-c86dbb105b40\"}'
+        --protected-settings '{\"workspaceKey\":\"uTTMvs/CQCkjAxQOOJEd1oYvaUvtMtcxlW6yqC3uAXo6/mDZQODO8DcRvFJ8rHIDjz6oJYocianNGPgsPR36bg==\"}'
